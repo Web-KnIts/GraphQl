@@ -28,7 +28,43 @@ const transactionResolver = {
             }
         }
     },
-	Mutation: {},
+	Mutation: {
+        createTransaction :async(_,{input},context)=>{
+            try{
+
+                const newTransaction = new Transaction({
+                    ...input,
+                    userId:context.getUser()._id
+                })
+                await newTransaction.save();
+                return newTransaction;
+            }catch(err)
+            {
+                console.log("Error creating Transaction: \n",err)
+                throw new Error(err.message ||'Error creating transaction')
+            }
+        },
+        updateTransaction :async(_,{input},context)=>{
+            try {     
+                const updatedTransaction = await Transaction.findByIdAndUpdate(input.transactionId,input,{new:true})
+                return updatedTransaction
+            } catch (error) {
+                console.log("Error updating Transaction: \n",err)
+                throw new Error(err.message ||'Error updating transaction')
+            }
+        },
+        deleteTransaction :async(_,{transactionId},context)=>{
+            try{
+                const deletedTransaction = await Transaction.findByIdAndDelete(transactionId);
+                return deletedTransaction;
+            }
+            catch(err)
+            {
+                console.log("Error deleting Transaction: \n",err)
+                throw new Error(err.message ||'Error deleting transaction')
+            }
+        }
+    },
 	Transaction: {},
 };
 

@@ -63,4 +63,4 @@ app.use('/',cors({
 
 await new Promise((resolve)=>httpServer.listen({port:process.env.PORT},resolve))
 await connectWithDatabase()
-console.log('server listened at 4000')
+console.log('server listened at ',process.env.PORT)
